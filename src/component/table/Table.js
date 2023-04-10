@@ -14,12 +14,14 @@ const UserTable = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [posts, setPosts] = useState([]);
+   const [loading, setLoading] = useState(false);
 
   const fetchAllPost = async () => {
     await axios
       .get("https://jsonplaceholder.typicode.com/posts")
       .then((resp) => {
         setPosts(resp?.data);
+        setLoading(true)
       })
       .catch((error) => {
         console.log(error.message);
@@ -58,7 +60,7 @@ const UserTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {posts
+           { loading ? posts
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((post) => {
                 return (
@@ -68,7 +70,7 @@ const UserTable = () => {
                     <TableCell>{post.body}</TableCell>
                   </TableRow>
                 );
-              })}
+            }) : <Loading/>}
           </TableBody>
         </Table>
       </TableContainer>
